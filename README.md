@@ -49,9 +49,13 @@ Just describe your task naturally:
 
 ### How It Works
 
-1. **First use:** Agent reads `project-history.md` to understand your projects
-2. **New task:** Agent matches keywords to decide which folder to use
-3. **New project:** Agent asks and creates new folder, then records it
+1. **Understand:** Agent analyzes your task and extracts 2-3 keywords
+2. **Search:** Agent reads `project-history.md` to match keywords against project history
+3. **Decide:**
+   - **Full match** → Use existing folder automatically
+   - **Partial match** → Ask for your confirmation
+   - **No match** → Ask if you want to create a new project
+4. **Execute:** Agent organizes files or creates new folder, then records it
 
 ---
 
@@ -127,9 +131,13 @@ openclaw skills install smart-workspace
 
 ### 工作原理
 
-1. **首次使用：** Agent 读取 `project-history.md` 了解你的项目
-2. **新任务：** Agent 匹配关键词，决定用哪个文件夹
-3. **新项目：** Agent 询问后创建新文件夹并记录
+1. **理解任务：** Agent 分析你的任务，提取2-3个关键词
+2. **搜索历史：** Agent 读取 `project-history.md`，用关键词匹配项目历史
+3. **决策判断：**
+   - **完全匹配** → 自动使用已有文件夹
+   - **部分匹配** → 询问你确认
+   - **无匹配** → 询问是否创建新项目
+4. **执行：** Agent 整理文件或创建新文件夹，并记录
 
 ---
 
