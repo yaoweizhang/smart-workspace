@@ -37,31 +37,31 @@ openclaw skills install smart-workspace
 ### First-Time Setup / 首次安装
 
 > **Important! / 重要！**
-> 
-> On first load, the skill will automatically create an empty `PROJECT-HISTORY.md` file in your workspace. No manual action needed.
+>
+> On first load, the skill will **automatically scan existing folders** in your workspace and generate `PROJECT-HISTORY.md`. No manual action needed.
 
-### How to Use
+---
 
-Just describe your task naturally:
+### How It Works
+
+1. **First Load**: Auto-scan existing folders → Generate `PROJECT-HISTORY.md`
+2. **Understand**: Agent analyzes your task and extracts 2-3 keywords
+3. **Match**:
+   - **Match found** → Use existing folder directly (auto update `last_used`)
+   - **No match** → Create new project folder automatically
+   - **Multiple matches** → Use first one and notify user
+4. **Done**: Agent tells you what was done
+
+---
+
+### You Just Say / 你只需说
 
 | You say | Agent automatically |
 |---------|-------------------|
 | "Analyze football data" | → Categorize to football project |
 | "Do battery test" | → Categorize to battery project |
 | "Shooting prediction" | → Categorize to shooting project |
-| "New project: develop XX" | → Ask to create new folder |
-
----
-
-### How It Works
-
-1. **Understand:** Agent analyzes your task and extracts 2-3 keywords
-2. **Search:** Agent reads `PROJECT-HISTORY.md` to match keywords against project history
-3. **Decide:**
-   - **Full match** → Use existing folder automatically
-   - **Partial match** → Ask for your confirmation
-   - **No match** → Ask if you want to create a new project
-4. **Execute:** Agent organizes files or creates new folder, then records it
+| "New project: develop XX" | → Auto-create new folder |
 
 ---
 
@@ -72,20 +72,20 @@ Just describe your task naturally:
 | football, prediction, verify | Football prediction |
 | battery | Battery analysis |
 | shooting | Shooting prediction |
-| other | Create new project |
+| other | Auto-create new project |
 
 ---
 
 ### FAQ
 
 **Q: Do I need to configure anything?**
-A: No. It works out of the box after installation.
+A: No. It auto-scans your workspace on first load.
 
 **Q: Will it delete my files?**
 A: No. It only updates the record file, never deletes actual files.
 
 **Q: How to add new projects?**
-A: Just tell Agent "I want to start a new project: xxx", and Agent will help create it.
+A: Just tell Agent "I want to start a new project: xxx", and Agent will auto-create it.
 
 **Q: Can multiple Agents share it?**
 A: Each Agent has its own project history, they don't affect each other.
@@ -125,31 +125,31 @@ openclaw skills install smart-workspace
 ### 首次安装
 
 > **重要！**
-> 
-> 首次加载技能时，会自动在你的 workspace 下创建空的 `PROJECT-HISTORY.md` 文件。无需手动操作。
+>
+> 首次加载技能时，会**自动扫描 workspace 现有文件夹**，生成 `PROJECT-HISTORY.md`。无需手动操作。
 
-### 使用方法
+---
 
-只需要描述你的任务：
+### 工作原理
+
+1. **首次加载**：自动扫描现有文件夹 → 生成 `PROJECT-HISTORY.md`
+2. **理解任务**：Agent 分析任务，提取2-3个关键词
+3. **智能匹配**：
+   - **匹配成功** → 直接使用已有文件夹（自动更新 last_used）
+   - **无匹配** → 自动创建新项目文件夹
+   - **多个匹配** → 使用第一个并告知用户
+4. **执行完成**：Agent 告知处理结果
+
+---
+
+### 你只需说 / You Just Say
 
 | 你说 | Agent 自动 |
 |------|-----------|
 | "分析足球数据" | → 归类到足球预测项目 |
 | "做电池测试" | → 归类到电池分析项目 |
 | "射击预测" | → 归类到射击预测项目 |
-| "新项目：开发xx" | → 询问是否创建新文件夹 |
-
----
-
-### 工作原理
-
-1. **理解任务：** Agent 分析你的任务，提取2-3个关键词
-2. **搜索历史：** Agent 读取 `PROJECT-HISTORY.md`，用关键词匹配项目历史
-3. **决策判断：**
-   - **完全匹配** → 自动使用已有文件夹
-   - **部分匹配** → 询问你确认
-   - **无匹配** → 询问是否创建新项目
-4. **执行：** Agent 整理文件或创建新文件夹，并记录
+| "新项目：开发xx" | → 自动创建新文件夹 |
 
 ---
 
@@ -160,20 +160,20 @@ openclaw skills install smart-workspace
 | 足球、预测、验证 | 足球预测相关 |
 | 电池 | 电池分析相关 |
 | 射击 | 射击预测相关 |
-| 其他 | 创建新项目 |
+| 其他 | 自动创建新项目 |
 
 ---
 
 ### 常见问题
 
 **问：需要我配置什么吗？**
-答：不需要。安装后自动生效。
+答：不需要。首次加载时自动扫描 workspace。
 
 **问：会删我的文件吗？**
 答：不会。只会更新记录文件，不会删除任何实际文件。
 
 **问：怎么添加新项目？**
-答：告诉 Agent "我要做一个新项目 xxx"，Agent 会帮你创建。
+答：告诉 Agent "我要做一个新项目 xxx"，Agent 会自动创建。
 
 **问：多个 Agent 共用吗？**
 答：每个 Agent 有独立的项目历史，互不影响。
@@ -181,6 +181,12 @@ openclaw skills install smart-workspace
 ---
 
 ## Changelog / 更新日志
+
+### v1.1.0
+- 首次安装自动扫描现有文件夹 / Auto-scan existing folders on first install
+- 匹配成功直接使用，无需反复确认 / Direct use on match, no unnecessary confirmations
+- 无匹配自动创建新项目 / Auto-create on no match
+- 更新 flow 为全自动模式 / Updated to fully automatic flow
 
 ### v1.0.0
 - 支持中文关键词匹配 / Support Chinese keyword mapping

@@ -1,6 +1,6 @@
 ---
 name: smart-workspace
-version: 1.0.0
+version: 1.1.0
 description: 轻量化的项目文件管理技能。自动管理智能体工作区，根据任务关键词匹配项目历史，智能决定使用现有文件夹或创建新文件夹。避免文件混乱，大大增强智能体的项目管理能力。
 description_en: Lightweight project file management skill. Automatically manages agent workspace, matches task keywords to project history, intelligently decides whether to use existing folders or create new ones. Prevents file chaos, greatly enhances agent project management capabilities.
 keywords: [文件整理, 项目管理, workspace, folder, organize, project]
@@ -13,22 +13,38 @@ metadata:
 
 Lightweight project file management skill. / 轻量化的项目文件管理技能。
 
-## First-Time Setup / 首次安装
+## First-Time Setup / 首次安装（自动初始化）
 
-> **首次加载此技能时，必须自动创建 `PROJECT-HISTORY.md` 文件！**
+> **首次加载此技能时，自动扫描 workspace 现有文件夹，生成 PROJECT-HISTORY.md！**
 
 ```
-EN: If ./PROJECT-HISTORY.md does not exist in current workspace, create it now:
-    Create empty file with template:
-    # Project History / 项目历史
-    
-    (leave it empty, add entries as projects are used)
+EN: If ./PROJECT-HISTORY.md does not exist:
+    1. Scan all folders in workspace root directory
+    2. Filter out system folders (.git, .openclaw, memory, skills, etc.)
+    3. For each real project folder found, create an entry in PROJECT-HISTORY.md
+    4. Set created = today, last_used = today
+    5. Continue to normal workflow
 
-CN: 如果当前workspace下不存在 ./PROJECT-HISTORY.md，立即创建：
-    创建带模板的空白文件：
-    # Project History / 项目历史
-    
-    （留空，随着项目使用逐渐添加记录）
+CN: 如果 ./PROJECT-HISTORY.md 不存在：
+    1. 扫描 workspace 根目录下所有文件夹
+    2. 过滤系统文件夹（.git、.openclaw、memory、skills 等）
+    3. 为每个真实项目文件夹创建条目，存入 PROJECT-HISTORY.md
+    4. created = 今天日期，last_used = 今天日期
+    5. 继续执行主流程
+```
+
+### 自动扫描逻辑
+
+```
+扫描 workspace/ 根目录
+    ↓
+发现 ./articles/、./data-science-tutorial/ 等文件夹
+    ↓
+过滤系统文件夹：.git, .openclaw, memory, skills, .learnings 等
+    ↓
+为每个真实项目生成 PROJECT-HISTORY.md 条目
+    ↓
+继续执行主流程
 ```
 
 ## Core Features / 核心功能
@@ -36,7 +52,7 @@ CN: 如果当前workspace下不存在 ./PROJECT-HISTORY.md，立即创建：
 | # | English | 中文 |
 |---|---------|------|
 | 1 | **Project History Search** - Match keywords in `PROJECT-HISTORY.md` | **项目历史搜索** - 在 `PROJECT-HISTORY.md` 中匹配关键词 |
-| 2 | **Smart Folder Recommendation** - Tell user which folder to use | **智能文件夹推荐** - 告诉用户应该使用哪个文件夹 |
+| 2 | **Smart Folder Recommendation** - Directly use matched folder | **智能文件夹推荐** - 直接使用匹配到的文件夹 |
 | 3 | **New Project Creation** - Create folders and record when needed | **新项目创建** - 必要时创建新项目文件夹并记录 |
 | 4 | **History Updates** - Keep project history current | **历史记录更新** - 保持项目历史最新 |
 
@@ -87,60 +103,53 @@ New project folder: ~/.openclaw/workspace-[agentname]/[projectname]/
 | 预测 / prediction | football |
 | 验证 / verification | verify |
 
-## Execution Flow / 执行流程
+## Execution Flow / 执行流程（全自动）
 
-### Step 1: Understand Task / 理解任务
+### Step 1: Initialize (First Time Only) / 初始化（仅首次）
+
+```
+IF ./PROJECT-HISTORY.md 不存在:
+    扫描 workspace 根目录所有文件夹
+    过滤系统文件夹（.git、.openclaw、memory、skills、.learnings 等）
+    为每个真实项目创建初始条目
+    继续 Step 2
+ELSE:
+    直接继续 Step 2
+```
+
+### Step 2: Understand Task / 理解任务
 
 ```
 EN: Analyze user's task, extract 2-3 keywords, determine project type
 CN: 分析用户任务，提取2-3个关键词，判断属于哪类项目
 ```
 
-### Step 2: Search History / 搜索历史
+### Step 3: Search & Match / 搜索匹配
 
 ```
-EN: Read PROJECT-HISTORY.md with read tool, parse ## key headings
-CN: 用 read 工具读取 PROJECT-HISTORY.md，解析 ## key 二级标题
+读取 PROJECT-HISTORY.md
+    ↓
+匹配规则（优先级顺序）：
+    1. key 完全匹配 → 直接使用
+    2. name/desc 包含关键词 → 直接使用
+    3. 中文关键词映射命中 → 直接使用
+    4. 无匹配 → 创建新项目
+    5. 多个模糊匹配 → 使用第一个，并向用户说明
 ```
 
-### Step 3: Decision / 决策
+### Step 4: Execute & Record / 执行与记录
 
 ```
-EN: Match results:
-    ├── Full match (key matches) → Tell user to use that folder
-    ├── Partial match (name/desc matches) → Confirm with user
-    └── No match → Ask if should create new project
+【已有项目】
+    1. 创建 ./[project]/ 文件夹（如不存在）
+    2. 更新 PROJECT-HISTORY.md 中 last_used = 今天日期
+    3. 回复："已将此任务整理到 [项目名]（last_used: 今天）"
 
-CN: 判断结果：
-    ├── 完全匹配(key一致) → 告知用户使用该文件夹
-    ├── 部分匹配(name或desc匹配) → 向用户确认
-    └── 无匹配 → 询问是否创建新项目
-```
-
-### Step 4: Execute / 执行
-
-```
-EN:
-Existing project:
-  "This is a [project name] task (last used: YYYY-MM-DD).
-   Files will be organized to [path]."
-
-New project:
-  "This is a new project. Confirm the name '[name]'?
-   I will:
-   1. Create ./[name]/ folder
-   2. Update ./PROJECT-HISTORY.md"
-
-CN:
-已有项目：
-  "好的，这是[项目名]任务（最后使用: YYYY-MM-DD）。
-   文件将整理到 [path]。"
-
-新项目：
-  "这是一个新项目。确定命名为 '[name]' 吗？
-   我将：
-   1. 创建 ./[name]/ 文件夹
-   2. 更新 ./PROJECT-HISTORY.md"
+【新项目】
+    1. 创建 ./[project-name]/ 文件夹
+       - 如文件夹已存在，自动追加 _1, _2 后缀
+    2. 在 PROJECT-HISTORY.md 追加新条目
+    3. 回复："已创建新项目 [项目名]，文件将整理到此目录"
 ```
 
 ## Decision Rules / 决策规则
@@ -161,62 +170,49 @@ CN:
 
 ## Example Dialogues / 示例对话
 
-### Case 1: Daily Analysis → Match Existing / 日常分析 → 匹配已有项目
+### Case 1: Match Found → Direct Use / 匹配成功 → 直接使用
 
 **User / 用户**: "帮我分析今天足球数据" / "Analyze today's football data"
 
 **Agent / 智能体**:
 ```
-[读取] ./PROJECT-HISTORY.md
+[扫描] ./PROJECT-HISTORY.md（如不存在则初始化）
 [提取关键词] "足球" → football
 [匹配结果] football -> ./data_analyzer/
   created: 2026-03-01, last_used: 2026-04-18
 
-EN: "This is a football prediction task (last used: 2026-04-18).
-    Files will be organized to data_analyzer/verify_2nd/."
-
-CN: "好的，这是足球预测任务（最后使用: 2026-04-18）。
-    文件将整理到 data_analyzer/verify_2nd/。"
+CN: "已将此任务整理到 data_analyzer/（last_used: 今天）"
+EN: "Task organized to data_analyzer/ (last_used: today)"
 ```
 
-### Case 2: New Project / 新项目
+### Case 2: No Match → Auto Create / 无匹配 → 自动创建
 
 **User / 用户**: "我要开发一个新的推荐算法" / "I want to develop a new recommendation algorithm"
 
 **Agent / 智能体**:
 ```
-[读取] ./PROJECT-HISTORY.md
 [提取关键词] "推荐"
 [匹配结果] 无匹配
 
-EN: "This is a new project. Confirm the name 'recommender'?
-    I will:
-    1. Create ./recommender/ folder
-    2. Update ./PROJECT-HISTORY.md"
+1. 创建 ./recommender/ 文件夹
+2. 在 PROJECT-HISTORY.md 追加新条目
+3. 回复："已创建新项目 recommender，文件将整理到此目录"
 
-CN: "这是一个新项目。确定命名为 'recommender' 吗？
-    我将：
-    1. 创建 ./recommender/ 文件夹
-    2. 更新 ./PROJECT-HISTORY.md"
+CN: "已创建新项目 recommender，文件将整理到此目录"
+EN: "Created new project recommender, files will be organized here"
 ```
 
-### Case 3: Partial Match Confirmation / 模糊匹配确认
+### Case 3: New Project in Existing Folder / 新项目在已有文件夹中
 
 **User / 用户**: "做一下射击项目的数据分析" / "Do data analysis for the shooting project"
 
 **Agent / 智能体**:
 ```
-[读取] ./PROJECT-HISTORY.md
 [提取关键词] "射击" → shooting
 [匹配结果] shooting -> ./shooting/
 
-EN: "Found project 'shooting/射击预测'. Is this the same task?"
-    - Yes → Use ./shooting/
-    - No → Create new project folder
-
-CN: "找到了 'shooting/射击预测' 项目。这是同一个任务吗？"
-    - 是 → 使用 ./shooting/
-    - 否 → 创建新项目文件夹
+CN: "已将此任务整理到 shooting/（last_used: 今天）"
+EN: "Task organized to shooting/ (last_used: today)"
 ```
 
 ## Test Cases / 测试案例
@@ -224,25 +220,28 @@ CN: "找到了 'shooting/射击预测' 项目。这是同一个任务吗？"
 ### ✅ Test 1: Football Analysis / 足球分析
 ```
 Input: "分析今天足球数据" / "Analyze today's football data"
-Expected: Match football → ./data_analyzer/
+Expected: Match football → 直接使用 ./data_analyzer/，更新 last_used
 ```
 
 ### ✅ Test 2: Battery Research / 电池研究
 ```
 Input: "做一下电池测试分析" / "Do battery test analysis"
-Expected: Match battery → ./battery-ana/
+Expected: Match battery → 直接使用 ./battery-ana/，更新 last_used
 ```
 
 ### ✅ Test 3: New Project / 新项目
 ```
 Input: "开发一个天气预测系统" / "Develop a weather prediction system"
-Expected: No match → Ask if should create new project
+Expected: No match → 自动创建 ./weather-prediction/ 文件夹
 ```
 
-### ✅ Test 4: Shooting Task / 射击任务
+### ✅ Test 4: First-Time Setup / 首次安装
 ```
-Input: "射击项目的数据整理" / "Organize shooting project data"
-Expected: Match shooting → ./shooting/
+Scenario: Agent has folders ./articles/, ./data-science/, memory/, .git/
+Expected: 
+  - 过滤 .git, memory, skills 等系统文件夹
+  - 为 articles, data-science 创建 PROJECT-HISTORY.md 条目
+  - created = today, last_used = today
 ```
 
 ## Cross-Agent Compatibility / 跨Agent兼容性
@@ -273,11 +272,11 @@ Path `./PROJECT-HISTORY.md` automatically resolves to the corresponding workspac
 
 ## Notes / 注意事项
 
-1. **Don't guess / 不要猜测**: Ask user if unsure / 无法判断时，询问用户
-2. **Keep clean / 保持整洁**: One project, one folder / 一个项目一个文件夹，不混放
-3. **Record history / 记录历史**: Must update `PROJECT-HISTORY.md` when creating new projects / 每次新建项目必须更新
-4. **Update timing / 更新时机**: Update `last_used` after each project use / 每次使用项目后更新 `last_used`
-5. **Confirm first / 确认优先**: Confirm before executing / 模糊匹配时先确认，再执行
-6. **Bilingual / 双语兼容**: Support both Chinese keyword mapping and English key matching / 同时支持中文关键词映射和英文key直接匹配
-7. **Workspace isolation / workspace隔离**: Different agents' project histories are independent / 不同Agent的项目历史互相独立
-8. **Regular archival / 定期归档**: Check monthly, archive projects with `last_used` > 3 months (keep actual files) / 建议每月检查一次，将长期未用的项目（last_used > 3个月）从 history 中标记为归档，实际文件保留不动
+1. **Be direct / 直接处理**: If match found, just use it and tell the user / 如匹配到项目，直接使用并告知用户
+2. **Auto-create / 自动创建**: If no match, create new folder without asking / 无匹配时直接创建新文件夹，无需询问
+3. **Update always / 始终更新**: Always update `last_used` when using existing project / 使用已有项目时必须更新 last_used
+4. **Record new projects / 记录新项目**: Must update `PROJECT-HISTORY.md` when creating new projects / 每次新建项目必须更新记录
+5. **Bilingual / 双语兼容**: Support both Chinese keyword mapping and English key matching / 同时支持中文关键词映射和英文key直接匹配
+6. **Workspace isolation / workspace隔离**: Different agents' project histories are independent / 不同Agent的项目历史互相独立
+7. **System folder filter / 系统文件夹过滤**: Skip .git, .openclaw, memory, skills, .learnings, .env, .DS_Store / 跳过系统文件夹
+8. **Regular archival / 定期归档**: Check monthly, archive projects with `last_used` > 3 months / 建议每月检查一次归档长期未用的项目
