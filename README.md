@@ -40,6 +40,22 @@ openclaw skills install smart-workspace
 >
 > On first load, the skill will **automatically scan existing folders** in your workspace and generate `PROJECT-HISTORY.md`. No manual action needed.
 
+**Auto-scan logic:**
+1. Read all folders in workspace root
+2. Filter out system folders (`.git`, `.openclaw`, `.learnings`, etc.)
+3. Create entries for each real project in `PROJECT-HISTORY.md`
+4. If `PROJECT-HISTORY.md` already exists, skip initialization
+
+```
+Scan workspace/
+    ↓
+Discover ./articles/, ./data-science-tutorial/, etc.
+    ↓
+Auto-generate PROJECT-HISTORY.md entries
+    ↓
+Continue to main workflow
+```
+
 ---
 
 ### How It Works

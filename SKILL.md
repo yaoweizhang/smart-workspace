@@ -1,7 +1,7 @@
 ---
 name: smart-workspace
 version: 1.1.0
-description: 轻量化的项目文件管理技能。自动管理智能体工作区，根据任务关键词匹配项目历史，智能决定使用现有文件夹或创建新文件夹。避免文件混乱，大大增强智能体的项目管理能力。
+description: 轻量化的项目文件管理技能。自动管理智能体工作区，根据任务关键词匹配项目历史，全自动执行，无需确认。避免文件混乱，大大增强智能体的项目管理能力。支持文件整理、文件夹管理、项目追踪、自动归档、工作区清理等功能。
 description_en: Lightweight project file management skill. Automatically manages agent workspace, matches task keywords to project history, intelligently decides whether to use existing folders or create new ones. Prevents file chaos, greatly enhances agent project management capabilities.
 keywords: [文件整理, 项目管理, workspace, folder, organize, project]
 metadata:
