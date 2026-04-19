@@ -34,9 +34,9 @@ openclaw skills install smart-workspace
 
 ---
 
-### First-Time Setup / 首次安装
+### First-Time Setup
 
-> **Important! / 重要！**
+> **Important!**
 >
 > On first load, the skill will **automatically scan existing folders** in your workspace and generate `PROJECT-HISTORY.md`. No manual action needed.
 
@@ -48,13 +48,13 @@ openclaw skills install smart-workspace
 2. **Understand**: Agent analyzes your task and extracts 2-3 keywords
 3. **Match**:
    - **Match found** → Use existing folder directly (auto update `last_used`)
-   - **No match** → Create new project folder automatically
+   - **No match** → Auto-create new project folder
    - **Multiple matches** → Use first one and notify user
 4. **Done**: Agent tells you what was done
 
 ---
 
-### You Just Say / 你只需说
+### You Just Say
 
 | You say | Agent automatically |
 |---------|-------------------|
@@ -142,7 +142,7 @@ openclaw skills install smart-workspace
 
 ---
 
-### 你只需说 / You Just Say
+### 你只需说
 
 | 你说 | Agent 自动 |
 |------|-----------|
@@ -183,12 +183,9 @@ openclaw skills install smart-workspace
 ## Changelog / 更新日志
 
 ### v1.1.0
-- 首次安装自动扫描现有文件夹 / Auto-scan existing folders on first install
-- 匹配成功直接使用，无需反复确认 / Direct use on match, no unnecessary confirmations
-- 无匹配自动创建新项目 / Auto-create on no match
-- 更新 flow 为全自动模式 / Updated to fully automatic flow
+- **EN:** Auto-scan existing folders on first install, fully automatic flow, direct use on match
+- **CN:** 首次安装自动扫描现有文件夹，全自动流程，匹配成功直接使用
 
 ### v1.0.0
-- 支持中文关键词匹配 / Support Chinese keyword mapping
-- 自动创建和记录项目 / Auto create and record projects
-- 双语版本 / Bilingual version (EN/CN)
+- **EN:** Support Chinese keyword mapping, auto create and record projects
+- **CN:** 支持中文关键词匹配，自动创建和记录项目
