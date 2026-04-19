@@ -13,18 +13,36 @@ metadata:
 
 Lightweight project file management skill. / 轻量化的项目文件管理技能。
 
+## First-Time Setup / 首次安装
+
+> **首次加载此技能时，必须自动创建 `PROJECT-HISTORY.md` 文件！**
+
+```
+EN: If ./PROJECT-HISTORY.md does not exist in current workspace, create it now:
+    Create empty file with template:
+    # Project History / 项目历史
+    
+    (leave it empty, add entries as projects are used)
+
+CN: 如果当前workspace下不存在 ./PROJECT-HISTORY.md，立即创建：
+    创建带模板的空白文件：
+    # Project History / 项目历史
+    
+    （留空，随着项目使用逐渐添加记录）
+```
+
 ## Core Features / 核心功能
 
 | # | English | 中文 |
 |---|---------|------|
-| 1 | **Project History Search** - Match keywords in `project-history.md` | **项目历史搜索** - 在 `project-history.md` 中匹配关键词 |
+| 1 | **Project History Search** - Match keywords in `PROJECT-HISTORY.md` | **项目历史搜索** - 在 `PROJECT-HISTORY.md` 中匹配关键词 |
 | 2 | **Smart Folder Recommendation** - Tell user which folder to use | **智能文件夹推荐** - 告诉用户应该使用哪个文件夹 |
 | 3 | **New Project Creation** - Create folders and record when needed | **新项目创建** - 必要时创建新项目文件夹并记录 |
 | 4 | **History Updates** - Keep project history current | **历史记录更新** - 保持项目历史最新 |
 
 ## Project History File / 项目历史文件
 
-Location / 位置: `workspace/project-history.md`
+Location / 位置: `workspace/PROJECT-HISTORY.md`
 
 ### Format / 格式
 
@@ -55,7 +73,7 @@ Location / 位置: `workspace/project-history.md`
 ```
 Current workspace: ~/.openclaw/workspace-[agentname]/
 
-Project history: ~/.openclaw/workspace-[agentname]/project-history.md
+Project history: ~/.openclaw/workspace-[agentname]/PROJECT-HISTORY.md
 New project folder: ~/.openclaw/workspace-[agentname]/[projectname]/
 ```
 
@@ -81,8 +99,8 @@ CN: 分析用户任务，提取2-3个关键词，判断属于哪类项目
 ### Step 2: Search History / 搜索历史
 
 ```
-EN: Read project-history.md with read tool, parse ## key headings
-CN: 用 read 工具读取 project-history.md，解析 ## key 二级标题
+EN: Read PROJECT-HISTORY.md with read tool, parse ## key headings
+CN: 用 read 工具读取 PROJECT-HISTORY.md，解析 ## key 二级标题
 ```
 
 ### Step 3: Decision / 决策
@@ -111,7 +129,7 @@ New project:
   "This is a new project. Confirm the name '[name]'?
    I will:
    1. Create ./[name]/ folder
-   2. Update ./project-history.md"
+   2. Update ./PROJECT-HISTORY.md"
 
 CN:
 已有项目：
@@ -122,7 +140,7 @@ CN:
   "这是一个新项目。确定命名为 '[name]' 吗？
    我将：
    1. 创建 ./[name]/ 文件夹
-   2. 更新 ./project-history.md"
+   2. 更新 ./PROJECT-HISTORY.md"
 ```
 
 ## Decision Rules / 决策规则
@@ -149,7 +167,7 @@ CN:
 
 **Agent / 智能体**:
 ```
-[读取] ./project-history.md
+[读取] ./PROJECT-HISTORY.md
 [提取关键词] "足球" → football
 [匹配结果] football -> ./data_analyzer/
   created: 2026-03-01, last_used: 2026-04-18
@@ -167,19 +185,19 @@ CN: "好的，这是足球预测任务（最后使用: 2026-04-18）。
 
 **Agent / 智能体**:
 ```
-[读取] ./project-history.md
+[读取] ./PROJECT-HISTORY.md
 [提取关键词] "推荐"
 [匹配结果] 无匹配
 
 EN: "This is a new project. Confirm the name 'recommender'?
     I will:
     1. Create ./recommender/ folder
-    2. Update ./project-history.md"
+    2. Update ./PROJECT-HISTORY.md"
 
 CN: "这是一个新项目。确定命名为 'recommender' 吗？
     我将：
     1. 创建 ./recommender/ 文件夹
-    2. 更新 ./project-history.md"
+    2. 更新 ./PROJECT-HISTORY.md"
 ```
 
 ### Case 3: Partial Match Confirmation / 模糊匹配确认
@@ -188,7 +206,7 @@ CN: "这是一个新项目。确定命名为 'recommender' 吗？
 
 **Agent / 智能体**:
 ```
-[读取] ./project-history.md
+[读取] ./PROJECT-HISTORY.md
 [提取关键词] "射击" → shooting
 [匹配结果] shooting -> ./shooting/
 
@@ -234,22 +252,22 @@ This skill can be used by different agents with automatic workspace adaptation:
 ```
 Agent A workspace:
   ~/.openclaw/workspace-data_analyzer/
-  ├── project-history.md
+  ├── PROJECT-HISTORY.md
   └── data_analyzer/
 
 Agent B workspace:
   ~/.openclaw/workspace-mlbots/
-  ├── project-history.md
+  ├── PROJECT-HISTORY.md
   └── baseball_project/
 ```
 
-Path `./project-history.md` automatically resolves to the corresponding workspace.
+Path `./PROJECT-HISTORY.md` automatically resolves to the corresponding workspace.
 
 ## Permission Notes / 权限说明
 
 | Permission / 权限 | Scope / 范围 |
 |-------------------|-------------|
-| Read / 读取 | `project-history.md` in current workspace |
+| Read / 读取 | `PROJECT-HISTORY.md` in current workspace |
 | Write / 写入 | Create new folders, update history in current workspace |
 | No access / 不访问 | System files, credentials, other agents' files |
 
@@ -257,7 +275,7 @@ Path `./project-history.md` automatically resolves to the corresponding workspac
 
 1. **Don't guess / 不要猜测**: Ask user if unsure / 无法判断时，询问用户
 2. **Keep clean / 保持整洁**: One project, one folder / 一个项目一个文件夹，不混放
-3. **Record history / 记录历史**: Must update `project-history.md` when creating new projects / 每次新建项目必须更新
+3. **Record history / 记录历史**: Must update `PROJECT-HISTORY.md` when creating new projects / 每次新建项目必须更新
 4. **Update timing / 更新时机**: Update `last_used` after each project use / 每次使用项目后更新 `last_used`
 5. **Confirm first / 确认优先**: Confirm before executing / 模糊匹配时先确认，再执行
 6. **Bilingual / 双语兼容**: Support both Chinese keyword mapping and English key matching / 同时支持中文关键词映射和英文key直接匹配

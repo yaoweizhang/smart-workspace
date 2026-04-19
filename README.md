@@ -34,6 +34,12 @@ openclaw skills install smart-workspace
 
 ---
 
+### First-Time Setup / 首次安装
+
+> **Important! / 重要！**
+> 
+> On first load, the skill will automatically create an empty `PROJECT-HISTORY.md` file in your workspace. No manual action needed.
+
 ### How to Use
 
 Just describe your task naturally:
@@ -50,7 +56,7 @@ Just describe your task naturally:
 ### How It Works
 
 1. **Understand:** Agent analyzes your task and extracts 2-3 keywords
-2. **Search:** Agent reads `project-history.md` to match keywords against project history
+2. **Search:** Agent reads `PROJECT-HISTORY.md` to match keywords against project history
 3. **Decide:**
    - **Full match** → Use existing folder automatically
    - **Partial match** → Ask for your confirmation
@@ -116,6 +122,12 @@ openclaw skills install smart-workspace
 
 ---
 
+### 首次安装
+
+> **重要！**
+> 
+> 首次加载技能时，会自动在你的 workspace 下创建空的 `PROJECT-HISTORY.md` 文件。无需手动操作。
+
 ### 使用方法
 
 只需要描述你的任务：
@@ -132,7 +144,7 @@ openclaw skills install smart-workspace
 ### 工作原理
 
 1. **理解任务：** Agent 分析你的任务，提取2-3个关键词
-2. **搜索历史：** Agent 读取 `project-history.md`，用关键词匹配项目历史
+2. **搜索历史：** Agent 读取 `PROJECT-HISTORY.md`，用关键词匹配项目历史
 3. **决策判断：**
    - **完全匹配** → 自动使用已有文件夹
    - **部分匹配** → 询问你确认
