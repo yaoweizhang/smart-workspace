@@ -56,7 +56,17 @@ Auto-generate PROJECT-HISTORY.md entries
 Continue to main workflow
 ```
 
----
+---### First-Time Use / 首次使用
+
+**方式一（推荐）:** 帮我整理一下 workspace 的文件，按项目分类放到不同文件夹，然后让 smart-workspace 记录。
+
+**方式二:** 用 smart-workspace 整理和记录文件。
+
+**Way 1 (Recommended):** Help me organize the files in my workspace — put each project's files into its own folder — then use smart-workspace to record them.
+
+**Way 2:** Use smart-workspace to organize and record the files.
+
+
 
 ### How It Works
 
